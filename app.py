@@ -1,6 +1,8 @@
 import os
 import subprocess
 import streamlit as st
+from fingpt.api import FinGPT_API
+
 
 # Install FinGPT manually if it's missing
 if not os.path.exists("FinGPT"):
