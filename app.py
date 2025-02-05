@@ -2,12 +2,13 @@ import os
 import subprocess
 import streamlit as st
 
-# Install FinNLP manually if it's missing
-try:
-    from finnlp.models.llm.fingpt_api import FinGPT_API
-except ModuleNotFoundError:
-    subprocess.run(["pip", "install", "git+https://github.com/AI4Finance-Foundation/FinNLP.git"], check=True)
-    from finnlp.models.llm.fingpt_api import FinGPT_API
+# Ensure FinGPT is installed
+if not os.path.exists("FinGPT"):
+    subprocess.run(["git", "clone", "https://github.com/AI4Finance-Foundation/FinGPT.git"])
+    subprocess.run(["pip", "install", "-e", "FinGPT"])
+
+# Import after installation
+from FinGPT.fingpt.api import FinGPT_API  # Adjusted import path based on FinGPT structure
 
 # Initialize FinGPT
 fingpt = FinGPT_API()
