@@ -1,4 +1,13 @@
+import os
+import subprocess
 import streamlit as st
+
+# Install FinNLP manually if not present
+if not os.path.exists("FinNLP"):
+    subprocess.run(["git", "clone", "https://github.com/AI4Finance-Foundation/FinNLP.git"])
+    subprocess.run(["pip", "install", "-e", "FinNLP"])
+
+# Import after installation
 from finnlp.models.llm.fingpt_api import FinGPT_API
 
 # Initialize FinGPT
