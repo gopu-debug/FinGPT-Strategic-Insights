@@ -1,5 +1,4 @@
 streamlit
 gitpython
-git+https://github.com/AI4Finance-Foundation/FinNLP.git
-
+git+https://github.com/AI4Finance-Foundation/FinGPT.git
 
