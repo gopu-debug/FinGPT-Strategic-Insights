@@ -2,6 +2,12 @@ import os
 import streamlit as st
 import requests
 
+
+
+
+# ✅ Use the latest FinGPT model
+MODEL_ENDPOINT = "https://api-inference.huggingface.co/models/FinGPT/fingpt-mt_llama3-8b_lora"
+
 # Replace with your working Hugging Face API Key
 HF_API_KEY = "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"
 
@@ -24,7 +30,7 @@ def query_fingpt(prompt):
     else:
         return f"🚨 Error: {response.status_code}, {response.text}"
 
-# Streamlit UI
+# ✅ Ensure `MODEL_ENDPOINT` is defined BEFORE calling query_fingpt()
 st.set_page_config(page_title="FinGPT Strategic Insights", page_icon="💰", layout="wide")
 st.title("💡 FinGPT for Executive Strategy")
 
@@ -32,13 +38,13 @@ st.markdown("""
 👋 Welcome! Enter a **strategic management question**, and FinGPT will provide insights.
 """)
 
-# User input
+# ✅ Ensure query is collected before calling query_fingpt()
 query = st.text_area("🔍 Ask a strategic question (e.g., 'How is AI transforming banking?'):")
 
 if st.button("Get Insights"):
     if query.strip():
         with st.spinner("Analyzing..."):
-            response = query_fingpt(query)
+            response = query_fingpt(query)  # ✅ Now using `fingpt-mt_llama3-8b_lora`
         st.subheader("📊 FinGPT's Response:")
         st.write(response)
     else:
