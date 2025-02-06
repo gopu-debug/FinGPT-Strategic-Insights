@@ -1,16 +1,20 @@
+import os
 import streamlit as st
 import requests
 
-# 🚨 Hardcoding API Key (Not Recommended for Security) 🚨
-HF_API_KEY = "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"
+# Replace with your working Hugging Face API Key
+HF_API_KEY = "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"
 
-# FinGPT model endpoint on Hugging Face
-MODEL_ENDPOINT = "https://api-inference.huggingface.co/models/FinGPT/fingpt-forecaster_dow30_llama2-7b_lora"
+# FinGPT Model Endpoint
+MODEL_ENDPOINT = "https://api-inference.huggingface.co/models/FinGPT/fingpt-mt_llama2-7b_lora"
 
-headers = {"Authorization": f"Bearer {HF_API_KEY}"}
+headers = {
+    "Authorization": f"Bearer {HF_API_KEY}",
+    "Content-Type": "application/json"
+}
 
 def query_fingpt(prompt):
-    """Queries the FinGPT model on Hugging Face and returns a response."""
+    """Queries FinGPT on Hugging Face"""
     response = requests.post(
         MODEL_ENDPOINT,
         headers=headers,
@@ -19,7 +23,7 @@ def query_fingpt(prompt):
     if response.status_code == 200:
         return response.json()[0]["generated_text"]
     else:
-        return f"Error: {response.status_code}, {response.text}"
+        return f"🚨 Error: {response.status_code}, {response.text}"
 
 # Streamlit UI
 st.set_page_config(page_title="FinGPT Strategic Insights", page_icon="💰", layout="wide")
