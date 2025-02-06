@@ -1,23 +1,25 @@
-import os
-import subprocess
 import streamlit as st
-from fingpt.api import FinGPT_API
+import requests
 
+# 🚨 Hardcoding API Key (Not Recommended for Security) 🚨
+HF_API_KEY = "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"
 
-# Install FinGPT manually if it's missing
-if not os.path.exists("FinGPT"):
-    subprocess.run(["git", "clone", "https://github.com/AI4Finance-Foundation/FinGPT.git"])
-    subprocess.run(["pip", "install", "-r", "FinGPT/requirements.txt"])
-    subprocess.run(["pip", "install", "-e", "FinGPT"])
+# FinGPT model endpoint on Hugging Face
+MODEL_ENDPOINT = "https://api-inference.huggingface.co/models/FinGPT/fingpt-forecaster_dow30_llama2-7b_lora"
 
-# Import after ensuring installation
-try:
-    from fingpt.fingpt_api import FinGPT_API  # Adjusted based on latest FinGPT structure
-except ModuleNotFoundError:
-    st.error("🚨 FinGPT module not found. The installation may have failed. Try restarting the app.")
+headers = {"Authorization": f"Bearer {HF_API_KEY}"}
 
-# Initialize FinGPT
-fingpt = FinGPT_API()
+def query_fingpt(prompt):
+    """Queries the FinGPT model on Hugging Face and returns a response."""
+    response = requests.post(
+        MODEL_ENDPOINT,
+        headers=headers,
+        json={"inputs": prompt},
+    )
+    if response.status_code == 200:
+        return response.json()[0]["generated_text"]
+    else:
+        return f"Error: {response.status_code}, {response.text}"
 
 # Streamlit UI
 st.set_page_config(page_title="FinGPT Strategic Insights", page_icon="💰", layout="wide")
@@ -33,7 +35,7 @@ query = st.text_area("🔍 Ask a strategic question (e.g., 'How is AI transformi
 if st.button("Get Insights"):
     if query.strip():
         with st.spinner("Analyzing..."):
-            response = fingpt.chat(query)
+            response = query_fingpt(query)
         st.subheader("📊 FinGPT's Response:")
         st.write(response)
     else:
