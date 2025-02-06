@@ -5,9 +5,6 @@ import requests
 # Replace with your working Hugging Face API Key
 HF_API_KEY = "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"
 
-# FinGPT Model Endpoint
-MODEL_ENDPOINT = "https://api-inference.huggingface.co/models/FinGPT/fingpt-mt_llama2-7b_lora"
-
 headers = {
     "Authorization": f"Bearer {HF_API_KEY}",
     "Content-Type": "application/json"
@@ -22,6 +19,8 @@ def query_fingpt(prompt):
     )
     if response.status_code == 200:
         return response.json()[0]["generated_text"]
+    elif response.status_code == 404:
+        return "🚨 Model not found. Try using a different FinGPT model."
     else:
         return f"🚨 Error: {response.status_code}, {response.text}"
 
